@@ -14,7 +14,7 @@ import com.tian.myglide.recycler.Resource;
  * desc 内存存储，使用最近最少存储
  */
 public class LruMemoryCache extends LruCache<Key, Resource> implements MemoryCache {
-    ResourceRemoveListener mResourceRemoveListener;
+    private ResourceRemoveListener mResourceRemoveListener;
 
     public LruMemoryCache(int maxSize) {
         super(maxSize);

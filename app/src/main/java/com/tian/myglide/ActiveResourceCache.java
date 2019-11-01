@@ -1,7 +1,6 @@
 package com.tian.myglide;
 
 import com.tian.myglide.recycler.Resource;
-
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -11,8 +10,7 @@ import java.util.Map;
  * create by txm  on 2019/10/30
  * desc 活动资源存储
  */
-public class ActiveResourceCache implements MemoryCache{
-    private ResourceRemoveListener resourceRemoveListener;
+public class ActiveResourceCache {
     private final ResouceReleaseListener mResouceReleaseListener;
 
      private Map<Key, WeakReferenceResource> mResourceMap = new HashMap<>();
@@ -46,8 +44,7 @@ public class ActiveResourceCache implements MemoryCache{
         return mQueue;
     }
 
-    @Override
-    public Resource remove2(Key key) {
+    public Resource remove(Key key) {
         WeakReferenceResource ref = mResourceMap.remove(key);
         if(ref != null) {
             return ref.get();
@@ -55,20 +52,14 @@ public class ActiveResourceCache implements MemoryCache{
        return  null;
     }
 
-    @Override
-    public void put2(Key key, Resource resource) {
+    public void put(Key key, Resource resource) {
         if(resource != null) {
             resource.setResouceReleaseListener(key,mResouceReleaseListener);
             mResourceMap.put(key, new WeakReferenceResource(key,resource, getQueue()));
         }
     }
 
-    @Override
-    public void setRemoveResourceListener(ResourceRemoveListener resourceRemoveListener) {
-        this.resourceRemoveListener = resourceRemoveListener;
-    }
 
-    @Override
     public Resource get(Key key) {
         WeakReferenceResource weakReferenceResource = mResourceMap.get(key);
         if(weakReferenceResource != null) {
@@ -88,7 +79,6 @@ public class ActiveResourceCache implements MemoryCache{
             }
         }
     }
-
 
     static class WeakReferenceResource extends  WeakReference<Resource>{
         Key mKey;
